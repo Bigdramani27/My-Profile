@@ -34,6 +34,16 @@
     <link rel="stylesheet" href="assets/css/responsive-3.css" />
   </head>
 
+  <style>
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(100%) brightness(100%);
+    }
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="time"]::-moz-calendar-picker-indicator {
+      color: white;
+    }
+  </style>
   <body class="absolute_header">
     <!-- Preloader Area Start -->
     <div class="preloader">
@@ -208,14 +218,16 @@
                   <p>Feel Free to ask me any question</p>
                 </div>
                 <div class="tj-contact-form">
-                  <form id="contact-form" action="https://jabe.infinityfreeapp.com/action/contact.php" method="post">
+                  <form id="contact">
                     <div class="row gx-3">
                       <div class="col-sm-6">
+                        <label
+                          >First Name<span class="text-danger"> *</span></label
+                        >
                         <div class="form_group">
                           <input
                             type="text"
                             name="fname"
-                            id="conName"
                             placeholder="First name"
                             autocomplete="off"
                             required
@@ -223,45 +235,54 @@
                         </div>
                       </div>
                       <div class="col-sm-6">
+                        <label
+                          >Last Name<span class="text-danger"> *</span></label
+                        >
                         <div class="form_group">
                           <input
                             type="text"
                             name="lname"
-                            id="conLName"
                             placeholder="Last name"
-                            autocomplete="off" 
+                            autocomplete="off"
                             required
                           />
                         </div>
                       </div>
                       <div class="col-sm-6">
+                        <label>Email<span class="text-danger"> *</span></label>
                         <div class="form_group">
                           <input
                             type="email"
                             name="email"
-                            id="conEmail"
                             placeholder="Email address"
-                            autocomplete="off" required
+                            autocomplete="off"
+                            required
                           />
                         </div>
                       </div>
                       <div class="col-sm-6">
+                        <label>Phone<span class="text-danger"> *</span></label>
                         <div class="form_group">
                           <input
                             type="tel"
                             name="phone"
-                            id="conPhone"
                             placeholder="Phone number"
-                            autocomplete="off" required
+                            autocomplete="off"
+                            required
                           />
                         </div>
                       </div>
                       <div class="col-12">
+                        <label
+                          >Type of Service<span class="text-danger">
+                            *</span
+                          ></label
+                        >
                         <div class="form_group">
                           <select
-                            name="subject"
-                            id="conService"
-                            class="tj-nice-select" required="true"
+                            name="service"
+                            class="tj-nice-select"
+                            required="true"
                           >
                             <option value="" selected disabled>
                               Choose Service
@@ -278,12 +299,47 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-12">
+                      <div class="col-sm-6">
+                        <label
+                          >Schedule Date<span class="text-danger">
+                            * (GMT)</span
+                          ></label
+                        >
+                        <div class="form_group">
+                          <input
+                            type="date"
+                            name="date"
+                            placeholder="Email address"
+                            autocomplete="off"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <label
+                          >Schedule Time<span class="text-danger">
+                            *</span
+                          ></label
+                        >
+                        <div class="form_group">
+                          <input
+                            type="time"
+                            name="time"
+                            placeholder="Date"
+                            autocomplete="off"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <label
+                          >Message<span class="text-danger"> *</span></label
+                        >
                         <div class="form_group">
                           <textarea
                             name="message"
-                            id="conMessage"
-                            placeholder="Message" required
+                            placeholder="Message"
+                            required
                           ></textarea>
                         </div>
                       </div>
@@ -382,6 +438,46 @@
 
     <!-- JS here -->
     <script src="assets/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      $(document).ready(function () {
+        $("#contact").submit(function (event) {
+          event.preventDefault();
+          Swal.fire({
+            title: "Please wait...",
+            html: "Sending Message",
+            showConfirmButton: false,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            willOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          $.ajax({
+            type: "POST",
+            url: "action/contact.php",
+            data: $(this).serialize(),
+          })
+            .done(function (response) {
+              Swal.close();
+              Swal.fire("Message Sent", "Thanks for reaching out", "success");
+              $("#contact")[0].reset();
+            })
+            .fail(function (error) {
+              Swal.fire(
+                "Oops...",
+                "Something went wrong! Please try again later.",
+                "error",
+              );
+            });
+        });
+      });
+    </script>
+    <script>
+      var today = new Date().toISOString().split("T")[0];
+      document.getElementById("scheduleDate").setAttribute("min", today);
+    </script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/nice-select.min.js"></script>
     <script src="assets/js/backToTop.js"></script>
