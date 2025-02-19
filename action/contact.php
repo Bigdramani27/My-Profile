@@ -22,7 +22,7 @@ $form_time = date('h:i A', strtotime($time));
 
 
 $from = $email;
-$to = "a.dramani@aisghana.org";
+$to = "adramani96@gmail.com";
 $subject = "Freelance Work";
 $msg = <<<EOT
 <!DOCTYPE html>
@@ -110,7 +110,7 @@ if (!$mail->Send()) {
     echo "<script>alert('failed')</script>";
 } else {
     // Sending to the user
-    $from = "a.dramani@aisghana.org";
+    $from = "adramani96@gmail.com";
     $to = $email;
     $subject = "Booking Appointment with Dramani";
     $msg = <<<EOT
