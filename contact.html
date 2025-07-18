@@ -11,7 +11,11 @@
 
     <!-- Place favicon.ico in the root directory -->
     <link rel="apple-touch-icon" href="assets/img/logo/logo.png" />
-    <link rel="shortcut icon" type="image/png" href="assets/img/logo/logo.png" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="assets/img/logo/logo.png"
+    />
 
     <!-- CSS here -->
     <link rel="stylesheet" href="assets/css/animate.min.css" />
@@ -94,9 +98,7 @@
             <div class="header-info-list d-none d-md-inline-block">
               <ul class="ul-reset">
                 <li>
-                  <a href="mailto:adramani96@gmail.com"
-                    >adramani96@gmail.com</a
-                  >
+                  <a href="mailto:adramani96@gmail.com">adramani96@gmail.com</a>
                 </li>
               </ul>
             </div>
@@ -141,9 +143,7 @@
             <div class="header-info-list d-none d-md-inline-block">
               <ul class="ul-reset">
                 <li>
-                  <a href="mailto:adramani96@gmail.com"
-                    >adramani96@gmail.com</a
-                  >
+                  <a href="mailto:adramani96@gmail.com">adramani96@gmail.com</a>
                 </li>
               </ul>
             </div>
@@ -309,6 +309,7 @@
                           <input
                             type="date"
                             name="date"
+                            id="scheduleDate"
                             placeholder="Email address"
                             autocomplete="off"
                             required
@@ -439,44 +440,47 @@
     <!-- JS here -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-      $(document).ready(function () {
-        $("#contact").submit(function (event) {
-          event.preventDefault();
-          Swal.fire({
-            title: "Please wait...",
-            html: "Sending Message",
-            showConfirmButton: false,
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            willOpen: () => {
-              Swal.showLoading();
-            },
-          });
-
-          $.ajax({
-            type: "POST",
-            url: "https://jabe.infinityfreeapp.com/action/port.php",
-            data: $(this).serialize(),
-          })
-            .done(function (response) {
-              Swal.close();
-              Swal.fire("Message Sent", "Thanks for reaching out", "success");
-              $("#contact")[0].reset();
-            })
-            .fail(function (error) {
-              Swal.fire(
-                "Oops...",
-                "Something went wrong! Please try again later.",
-                "error",
-              );
-            });
-        });
-      });
-    </script>
+  
     <script>
       var today = new Date().toISOString().split("T")[0];
       document.getElementById("scheduleDate").setAttribute("min", today);
+            document
+        .getElementById("contact")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent actual form submission
+
+          const fname = document.querySelector('input[name="fname"]').value;
+          const lname = document.querySelector('input[name="lname"]').value;
+          const email = document.querySelector('input[name="email"]').value;
+          const phone = document.querySelector('input[name="phone"]').value;
+          const service = document.querySelector(
+            'select[name="service"]',
+          ).value;
+          const date = document.querySelector('input[name="date"]').value;
+          const time = document.querySelector('input[name="time"]').value;
+          const message = document.querySelector(
+            'textarea[name="message"]',
+          ).value;
+
+          const subject = encodeURIComponent(
+            "Service Inquiry from " + fname + " " + lname,
+          );
+          const body = encodeURIComponent(
+            `First Name: ${fname}
+Last Name: ${lname}
+Email: ${email}
+Phone: ${phone}
+Service: ${service}
+Scheduled Date: ${date}
+Scheduled Time: ${time} EST
+Message: ${message}`,
+          );
+
+          const mailtoLink = `mailto:adramani96@gmail.com?subject=${subject}&body=${body}`;
+
+          // Open the user's email app
+          window.location.href = mailtoLink;
+        });
     </script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/nice-select.min.js"></script>
